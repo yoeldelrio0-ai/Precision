@@ -125,6 +125,70 @@
     }
     .nav-cta:hover { background: #d97c10 !important; color: #fff !important; }
 
+    /* ── HAMBURGER ────────────────────────────────────────────── */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem;
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: #fff;
+      border-radius: 1px;
+      transition: transform 0.25s ease, opacity 0.2s ease;
+    }
+    .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle.open span:nth-child(2) { opacity: 0; }
+    .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ── MOBILE NAV ───────────────────────────────────────────── */
+    #mobile-nav {
+      display: none;
+      position: fixed;
+      top: 80px;
+      left: 0;
+      right: 0;
+      background: #1a1a1a;
+      border-top: 1px solid #2a2a2a;
+      padding: 0 1.5rem 1.5rem;
+      z-index: 99;
+      flex-direction: column;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+    }
+    #mobile-nav.open { display: flex; }
+    #mobile-nav a {
+      color: #c0c0c0;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 1rem 0;
+      border-bottom: 1px solid #2a2a2a;
+      transition: color 0.2s;
+    }
+    #mobile-nav a:hover { color: #F7941D; }
+    #mobile-nav .mob-cta {
+      margin-top: 1rem;
+      background: #F7941D;
+      color: #fff !important;
+      text-align: center;
+      padding: 0.875rem;
+      border-radius: 3px;
+      border-bottom: none !important;
+    }
+    #mobile-nav .mob-cta:hover { background: #d97c10; }
+
     /* ── HERO ────────────────────────────────────────────────── */
     #hero {
       position: relative;
@@ -260,10 +324,6 @@
     /* ── YOUR BRICK ────────────────────────────────────────────── */
     #your-brick { background: #f4f4f4; }
     .split-grid.reverse { }
-    @media (max-width: 768px) {
-      .split-grid { grid-template-columns: 1fr; }
-      .split-grid .order-last { order: -1; }
-    }
 
     /* ── THE STONE ─────────────────────────────────────────────── */
     #the-stone { background: #fff; }
@@ -510,12 +570,27 @@
       .contact-grid { grid-template-columns: 1fr; }
       .footer-grid { grid-template-columns: 1fr 1fr; }
     }
+    @media (max-width: 768px) {
+      .split-grid { grid-template-columns: 1fr; }
+      .split-grid .order-last { order: -1; }
+      .split-img { height: auto; min-height: 220px; }
+    }
     @media (max-width: 700px) {
-      .hero-content { margin-left: 1.5rem; }
+      /* Header: switch to flex, hide text logo, show hamburger */
+      #site-header { display: flex; justify-content: space-between; align-items: center; padding: 0 1rem; }
+      .site-logo { display: none; }
+      .site-nav { display: none; }
+      .nav-toggle { display: flex; }
+      /* Hero: remove double left-padding */
+      #hero { padding-left: 0; padding-right: 0; }
+      .hero-content { margin-left: 0; padding: 0 1.5rem; max-width: 100%; }
+      /* Sections */
       .gallery-grid { grid-template-columns: 1fr 1fr; }
       .footer-grid { grid-template-columns: 1fr; }
       .form-row { grid-template-columns: 1fr; }
-      .site-nav { display: none; }
+      .services-img-wrap { grid-template-columns: 1fr; }
+      .services-img-wrap img { height: 200px; }
+      section { padding: 3.5rem 1.25rem; }
     }
     @media (max-width: 500px) {
       .gallery-grid { grid-template-columns: 1fr; }
@@ -538,7 +613,19 @@
     <a href="#gallery">Gallery</a>
     <a href="#contact" class="nav-cta">Free Quote</a>
   </nav>
+  <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
 </header>
+
+<div id="mobile-nav">
+  <a href="#intro">About</a>
+  <a href="#your-brick">Concrete</a>
+  <a href="#the-stone">Masonry</a>
+  <a href="#services">Services</a>
+  <a href="#gallery">Gallery</a>
+  <a href="#contact" class="mob-cta">Free Quote</a>
+</div>
 
 <!-- ══ HERO ════════════════════════════════════════════════════ -->
 <section id="hero">
@@ -977,6 +1064,25 @@ window.addEventListener('scroll', () => {
   init();
 })();
 
+/* ── HAMBURGER TOGGLE ────────────────────────────────────────── */
+(function() {
+  const btn = document.getElementById('nav-toggle');
+  const nav = document.getElementById('mobile-nav');
+  if (!btn || !nav) return;
+  btn.addEventListener('click', () => {
+    const open = btn.classList.toggle('open');
+    nav.classList.toggle('open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+  nav.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      btn.classList.remove('open');
+      nav.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  });
+})();
+
 /* ── SCROLL FADE-IN ──────────────────────────────────────────── */
 (function() {
   const els = document.querySelectorAll('.fade-up');
@@ -987,7 +1093,7 @@ window.addEventListener('scroll', () => {
         io.unobserve(e.target);
       }
     });
-  }, { threshold: 0.12 });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
   els.forEach(el => io.observe(el));
 })();
 </script>
