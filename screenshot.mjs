@@ -19,10 +19,14 @@ const next = nums.length ? Math.max(...nums) + 1 : 1;
 const filename = label ? `screenshot-${next}-${label}.png` : `screenshot-${next}.png`;
 const filepath = path.join(dir, filename);
 
-const browser = await puppeteer.launch({ headless: true });
+const browser = await puppeteer.launch({
+  headless: true,
+  args: ['--autoplay-policy=no-user-gesture-required'],
+});
 const page = await browser.newPage();
 await page.setViewport({ width: 1440, height: 900 });
-await page.goto(url, { waitUntil: 'networkidle2' });
+await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
+await new Promise(r => setTimeout(r, 3000));
 await page.screenshot({ path: filepath, fullPage: false });
 await browser.close();
 

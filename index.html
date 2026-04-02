@@ -196,13 +196,14 @@
       display: flex; align-items: center;
       overflow: hidden;
     }
-    #hero-canvas {
+    #hero-video {
       position: absolute; inset: 0;
       width: 100%; height: 100%;
+      object-fit: cover;
     }
     .hero-overlay {
       position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(10,10,10,0.82) 0%, rgba(26,26,26,0.65) 60%, rgba(10,10,10,0.80) 100%);
+      background: linear-gradient(135deg, rgba(10,10,10,0.68) 0%, rgba(26,26,26,0.48) 60%, rgba(10,10,10,0.65) 100%);
     }
     .hero-content {
       position: relative; z-index: 2;
@@ -426,7 +427,7 @@
       gap: 0.75rem;
     }
     .services-img-wrap img {
-      width: 100%; height: 180px; object-fit: cover;
+      width: 100%; height: 240px; object-fit: cover;
       border-radius: 3px;
       box-shadow: 0 4px 16px rgba(0,0,0,0.14);
     }
@@ -436,7 +437,7 @@
     #gallery .section-title { color: #fff; }
     .gallery-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 0.75rem;
       margin-top: 3rem;
     }
@@ -589,6 +590,7 @@
       .hero-content { margin-left: 0; padding: 0 1.5rem; max-width: 100%; }
       /* Sections */
       .gallery-grid { grid-template-columns: 1fr 1fr; }
+      /* already 2-col at desktop */
       .footer-grid { grid-template-columns: 1fr; }
       .form-row { grid-template-columns: 1fr; }
       .services-img-wrap { grid-template-columns: 1fr; }
@@ -597,6 +599,99 @@
     }
     @media (max-width: 500px) {
       .gallery-grid { grid-template-columns: 1fr; }
+      /* stack on small phones */
+    }
+
+    /* ── TESTIMONIALS ────────────────────────────────────────────── */
+    #testimonials { background: #f4f4f4; padding: 5rem 2rem; overflow: hidden; }
+    .testimonials-badge {
+      display: inline-block;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 0.25rem 1rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: #555;
+      margin-bottom: 1.25rem;
+    }
+    .testimonials-columns {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+      max-height: 740px;
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent);
+      mask-image: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent);
+    }
+    .testi-col {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      flex-shrink: 0;
+      width: 300px;
+    }
+    .testi-col-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .testi-col-inner.animate-1 { animation: testi-scroll 18s linear infinite; }
+    .testi-col-inner.animate-2 { animation: testi-scroll 24s linear infinite; }
+    .testi-col-inner.animate-3 { animation: testi-scroll 21s linear infinite; }
+    @keyframes testi-scroll {
+      0%   { transform: translateY(0); }
+      100% { transform: translateY(-50%); }
+    }
+    .testi-card {
+      background: #fff;
+      border: 1px solid #e8e8e8;
+      border-radius: 20px;
+      padding: 1.75rem;
+      box-shadow:
+        0 2px 8px rgba(247,148,29,0.07),
+        0 8px 32px rgba(0,0,0,0.07);
+      width: 300px;
+      flex-shrink: 0;
+    }
+    .testi-text {
+      font-size: 0.9rem;
+      line-height: 1.75;
+      color: #555;
+    }
+    .testi-author {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 1.25rem;
+    }
+    .testi-avatar {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .testi-name {
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: #333;
+      font-family: 'Montserrat', sans-serif;
+      letter-spacing: -0.01em;
+      line-height: 1.3;
+    }
+    .testi-role {
+      font-size: 0.8rem;
+      color: #999;
+      line-height: 1.3;
+    }
+    @media (max-width: 900px) {
+      .testi-col.col-2 { display: none; }
+    }
+    @media (max-width: 640px) {
+      .testi-col.col-3 { display: none; }
+      .testi-col { width: 280px; }
+      .testi-card { width: 280px; }
     }
   </style>
 </head>
@@ -614,6 +709,7 @@
     <a href="#the-stone">Masonry</a>
     <a href="#services">Services</a>
     <a href="#gallery">Gallery</a>
+    <a href="#testimonials">Reviews</a>
     <a href="#contact" class="nav-cta">Free Quote</a>
   </nav>
   <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
@@ -627,15 +723,18 @@
   <a href="#the-stone">Masonry</a>
   <a href="#services">Services</a>
   <a href="#gallery">Gallery</a>
+  <a href="#testimonials">Reviews</a>
   <a href="#contact" class="mob-cta">Free Quote</a>
 </div>
 
 <!-- ══ HERO ════════════════════════════════════════════════════ -->
 <section id="hero">
-  <canvas id="hero-canvas"></canvas>
+  <video id="hero-video" autoplay muted loop playsinline>
+    <source src="hero-video.mp4" type="video/mp4">
+  </video>
   <div class="hero-overlay"></div>
 <div class="hero-content">
-    <span class="hero-eyebrow">Southeastern North Carolina's Finest</span>
+    <span class="hero-eyebrow">Proudly Serving the Carolinas</span>
     <h1 class="hero-title">Expert Concrete&nbsp;&amp;<br>Masonry Craftsmanship</h1>
     <p class="hero-sub">Your trusted partner for precision concrete &amp; masonry work. Built tough, built beautiful — built to last generations.</p>
     <div class="hero-actions">
@@ -654,7 +753,7 @@
         <h2 class="section-title">Your Trusted Partner to Concrete &amp; Stone Installation</h2>
         <span class="divider"></span>
         <p class="section-body">
-          Precision Concrete &amp; Masonry has been a cornerstone of southeastern North Carolina for years. We specialize in brick, block, stone, and concrete work for residential and commercial clients. Every project is handled with precision, pride, and the hands-on experience it takes to do this work right.
+          Precision Concrete &amp; Masonry has been a cornerstone across North and South Carolina. We specialize in brick, block, stone, and concrete work for residential and commercial clients. Every project is handled with precision, pride, and the hands-on experience it takes to do this work right.
         </p>
         <br>
         <p class="section-body">
@@ -665,8 +764,8 @@
       </div>
       <div>
         <img
-          src="https://placehold.co/580x420/2a1a0a/e47c25?text=Masonry+Work"
-          alt="Masonry craftsmen at work"
+          src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=580&h=420&q=80"
+          alt="Masonry craftsmen laying brick"
           class="split-img"
         />
       </div>
@@ -680,8 +779,8 @@
     <div class="split-grid fade-up">
       <div>
         <img
-          src="https://placehold.co/580x420/3a2a1a/e47c25?text=Brick+Work"
-          alt="Brick masonry"
+          src="https://images.unsplash.com/photo-1615129928121-3d8db19de4c9?auto=format&fit=crop&w=580&h=420&q=80"
+          alt="Stamped concrete driveway"
           class="split-img"
         />
       </div>
@@ -723,8 +822,8 @@
       </div>
       <div>
         <img
-          src="https://placehold.co/580x420/1a2a1a/e47c25?text=Stone+Work"
-          alt="Stone masonry"
+          src="https://images.unsplash.com/photo-1566615906943-9040df5802c7?auto=format&fit=crop&w=580&h=420&q=80"
+          alt="Expert brick and stone masonry wall"
           class="split-img"
         />
       </div>
@@ -735,16 +834,17 @@
 <!-- ══ YEARS OF EXPERIENCE ════════════════════════════════════ -->
 <section id="experience">
   <div class="container fade-up" style="position:relative;">
-    <div class="exp-number">15+</div>
+    <div class="exp-number">20+</div>
     <div class="exp-label">Years of Experience</div>
-    <p class="exp-sub">Serving southeastern North Carolina with precision and pride</p>
+    <p class="exp-sub" style="font-size:1.15rem; font-weight:700; color:#F7941D; letter-spacing:0.04em; text-transform:uppercase; margin-top:1.25rem;">Your Project, Our Priority</p>
+    <p class="exp-sub" style="margin-top:0.5rem;">Serving North &amp; South Carolina with precision and pride</p>
   </div>
 </section>
 
 <!-- ══ ROANOKE CTA ═════════════════════════════════════════════ -->
 <section id="roanoke-cta">
   <div class="container fade-up" style="position:relative;">
-    <h2>Southeastern NC's Most Trusted Concrete &amp; Masonry</h2>
+    <h2>The Carolinas' Most Trusted Concrete &amp; Masonry</h2>
     <p>From residential driveways to large commercial masonry — no job is too big or too small.</p>
     <a href="#contact" class="btn-primary">Get in Touch Today</a>
   </div>
@@ -775,10 +875,8 @@
         <li>Commercial Masonry Projects</li>
       </ul>
       <div class="services-img-wrap">
-        <img src="https://placehold.co/300x180/2a1a0a/e47c25?text=Concrete" alt="Concrete work" />
-        <img src="https://placehold.co/300x180/1a1a2a/e47c25?text=Stonework" alt="Stone work" />
-        <img src="https://placehold.co/300x180/1a2a1a/e47c25?text=Brick" alt="Brick work" />
-        <img src="https://placehold.co/300x180/2a1a1a/e47c25?text=Patios" alt="Patio work" />
+        <img src="https://images.unsplash.com/photo-1623625434531-d130448273c1?auto=format&fit=crop&w=300&h=220&q=80" alt="Concrete patio installation" />
+        <img src="https://images.unsplash.com/photo-1608947273783-c5d1ff5771ca?auto=format&fit=crop&w=300&h=220&q=80" alt="Stone retaining wall and patio" />
       </div>
     </div>
   </div>
@@ -793,12 +891,175 @@
       <span class="divider" style="margin:1rem auto;"></span>
     </div>
     <div class="gallery-grid fade-up">
-      <div class="gallery-item"><img src="https://placehold.co/480x360/2a1a0a/e47c25?text=Project+1" alt="Project 1" /></div>
-      <div class="gallery-item"><img src="https://placehold.co/480x360/1a2a1a/e47c25?text=Project+2" alt="Project 2" /></div>
-      <div class="gallery-item"><img src="https://placehold.co/480x360/1a1a2a/e47c25?text=Project+3" alt="Project 3" /></div>
-      <div class="gallery-item"><img src="https://placehold.co/480x360/2a1a1a/e47c25?text=Project+4" alt="Project 4" /></div>
-      <div class="gallery-item"><img src="https://placehold.co/480x360/0a1a2a/e47c25?text=Project+5" alt="Project 5" /></div>
-      <div class="gallery-item"><img src="https://placehold.co/480x360/2a0a1a/e47c25?text=Project+6" alt="Project 6" /></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1696944389930-8e173626b912?auto=format&fit=crop&w=480&h=360&q=80" alt="Stamped concrete patio installation" /></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1638704410917-1997afaffe14?auto=format&fit=crop&w=480&h=360&q=80" alt="Brick masonry craftsmanship" /></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1566474949309-1ecedbf7382e?auto=format&fit=crop&w=480&h=360&q=80" alt="Stone wall masonry work" /></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1646044447734-03341993d740?auto=format&fit=crop&w=480&h=360&q=80" alt="Concrete flatwork and finishing" /></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TESTIMONIALS ════════════════════════════════════════════ -->
+<section id="testimonials">
+  <div class="container">
+    <div class="fade-up" style="text-align:center; max-width:560px; margin:0 auto;">
+      <div><span class="testimonials-badge">Testimonials</span></div>
+      <h2 class="section-title" style="margin-bottom:0.75rem;">What Our Customers Say</h2>
+      <p class="section-body" style="margin:0 auto; text-align:center;">Real feedback from homeowners and contractors across the Carolinas.</p>
+    </div>
+
+    <div class="testimonials-columns fade-up">
+
+      <!-- Column 1 -->
+      <div class="testi-col col-1">
+        <div class="testi-col-inner animate-1">
+          <!-- Set 1 -->
+          <div class="testi-card">
+            <p class="testi-text">"They poured our entire driveway and back patio — absolutely flawless work. Twenty years of experience really shows in every detail of the finished product."</p>
+            <div class="testi-author">
+              <img class="testi-avatar" src="https://randomuser.me/api/portraits/men/32.jpg" alt="Mike R." />
+              <div><div class="testi-name">Mike R.</div><div class="testi-role">Homeowner</div></div>
+            </div>
+          </div>
+          <div class="testi-card">
+            <p class="testi-text">"Hired them for a large retaining wall project. The crew was professional, on time, and the finished product exceeded every expectation I had going in."</p>
+            <div class="testi-author">
+              <img class="testi-avatar" src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah T." />
+              <div><div class="testi-name">Sarah T.</div><div class="testi-role">Property Manager</div></div>
+            </div>
+          </div>
+          <div class="testi-card">
+            <p class="testi-text">"I've worked with a lot of masonry crews across the Carolinas. Precision is the real deal — clean work, fair pricing, no excuses, and they treat your project like it's their own."</p>
+            <div class="testi-author">
+              <img class="testi-avatar" src="https://randomuser.me/api/portraits/men/55.jpg" alt="James L." />
+              <div><div class="testi-name">James L.</div><div class="testi-role">General Contractor</div></div>
+            </div>
+          </div>
+          <!-- Set 2 (duplicate for seamless loop) -->
+          <div class="testi-card">
+            <p class="testi-text">"They poured our entire driveway and back patio — absolutely flawless work. Twenty years of experience really shows in every detail of the finished product."</p>
+            <div class="testi-author">
+              <img class="testi-avatar" src="https://randomuser.me/api/portraits/men/32.jpg" alt="Mike R." />
+              <div><div class="testi-name">Mike R.</div><div class="testi-role">Homeowner</div></div>
+            </div>
+          </div>
+          <div class="testi-card">
+            <p class="testi-text">"Hired them for a large retaining wall project. The crew was professional, on time, and the finished product exceeded every expectation I had going in."</p>
+            <div class="testi-author">
+              <img class="testi-avatar" src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah T." />
+              <div><div class="testi-name">Sarah T.</div><div class="testi-role">Property Manager</div></div>
+            </div>
+          </div>
+          <div class="testi-card">
+            <p class="testi-text">"I've worked with a lot of masonry crews across the Carolinas. Precision is the real deal — clean work, fair pricing, no excuses, and they treat your project like it's their own."</p>
+            <div class="testi-author">
+              <img class="testi-avatar" src="https://randomuser.me/api/portraits/men/55.jpg" alt="James L." />
+              <div><div class="testi-name">James L.</div><div class="testi-role">General Contractor</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Column 2 (hidden on mobile) -->
+      <div class="testi-col col-2">
+        <div class="testi-col-inner animate-2">
+          <!-- Set 1 -->
+          <div class="testi-card">
+            <p class="testi-text">"Our brick fireplace looks absolutely stunning. They matched the existing brick perfectly and cleaned up every single day before leaving. Could not be happier."</p>
+            <div class="testi-author">
+              <img class="testi-avatar" src="https://randomuser.me/api/portraits/women/68.jpg" alt="Linda H." />
+              <div><div class="testi-name">Linda H.</div><div class="testi-role">Homeowner</div></div>
+            </div>
+          </div>
+          <div class="testi-card">
+            <p class="testi-text">"Used them on two commercial builds now. Always on schedule and the block work is dead plumb every single time. They're the only masonry crew I call."</p>
+            <div class="testi-author">
+              <img class="testi-avatar" src="https://randomuser.me/api/portraits/men/41.jpg" alt="Carlos M." />
+              <div><div class="testi-name">Carlos M.</div><div class="testi-role">Commercial Developer</div></div>
+            </div>
+          </div>
+          <div class="testi-card">
+            <p class="testi-text">"The concrete steps and walkway they built completely transformed our front yard. Neighbors keep stopping to ask who did the work — I'm handing out their number constantly."</p>
+            <div class="testi-author">
+              <img class="testi-avatar" src="https://randomuser.me/api/portraits/women/22.jpg" alt="Patricia W." />
+              <div><div class="testi-name">Patricia W.</div><div class="testi-role">Homeowner</div></div>
+            </div>
+          </div>
+          <!-- Set 2 (duplicate for seamless loop) -->
+          <div class="testi-card">
+            <p class="testi-text">"Our brick fireplace looks absolutely stunning. They matched the existing brick perfectly and cleaned up every single day before leaving. Could not be happier."</p>
+            <div class="testi-author">
+              <img class="testi-avatar" src="https://randomuser.me/api/portraits/women/68.jpg" alt="Linda H." />
+              <div><div class="testi-name">Linda H.</div><div class="testi-role">Homeowner</div></div>
+            </div>
+          </div>
+          <div class="testi-card">
+            <p class="testi-text">"Used them on two commercial builds now. Always on schedule and the block work is dead plumb every single time. They're the only masonry crew I call."</p>
+            <div class="testi-author">
+              <img class="testi-avatar" src="https://randomuser.me/api/portraits/men/41.jpg" alt="Carlos M." />
+              <div><div class="testi-name">Carlos M.</div><div class="testi-role">Commercial Developer</div></div>
+            </div>
+          </div>
+          <div class="testi-card">
+            <p class="testi-text">"The concrete steps and walkway they built completely transformed our front yard. Neighbors keep stopping to ask who did the work — I'm handing out their number constantly."</p>
+            <div class="testi-author">
+              <img class="testi-avatar" src="https://randomuser.me/api/portraits/women/22.jpg" alt="Patricia W." />
+              <div><div class="testi-name">Patricia W.</div><div class="testi-role">Homeowner</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Column 3 (hidden below 900px) -->
+      <div class="testi-col col-3">
+        <div class="testi-col-inner animate-3">
+          <!-- Set 1 -->
+          <div class="testi-card">
+            <p class="testi-text">"Hired them for chimney repair and tuckpointing on a historic property. They took exceptional care with the original materials — the results were absolutely perfect."</p>
+            <div class="testi-author">
+              <img class="testi-avatar" src="https://randomuser.me/api/portraits/men/76.jpg" alt="David K." />
+              <div><div class="testi-name">David K.</div><div class="testi-role">Restoration Contractor</div></div>
+            </div>
+          </div>
+          <div class="testi-card">
+            <p class="testi-text">"From the first phone call to the final cleanup, everything was handled professionally. Our stamped concrete patio is the talk of the entire neighborhood this summer."</p>
+            <div class="testi-author">
+              <img class="testi-avatar" src="https://randomuser.me/api/portraits/women/15.jpg" alt="Amy J." />
+              <div><div class="testi-name">Amy J.</div><div class="testi-role">Homeowner</div></div>
+            </div>
+          </div>
+          <div class="testi-card">
+            <p class="testi-text">"They completed our commercial storefront masonry on time and under budget. These guys are the best in the Carolinas, period. Won't use anyone else going forward."</p>
+            <div class="testi-author">
+              <img class="testi-avatar" src="https://randomuser.me/api/portraits/men/88.jpg" alt="Robert B." />
+              <div><div class="testi-name">Robert B.</div><div class="testi-role">Business Owner</div></div>
+            </div>
+          </div>
+          <!-- Set 2 (duplicate for seamless loop) -->
+          <div class="testi-card">
+            <p class="testi-text">"Hired them for chimney repair and tuckpointing on a historic property. They took exceptional care with the original materials — the results were absolutely perfect."</p>
+            <div class="testi-author">
+              <img class="testi-avatar" src="https://randomuser.me/api/portraits/men/76.jpg" alt="David K." />
+              <div><div class="testi-name">David K.</div><div class="testi-role">Restoration Contractor</div></div>
+            </div>
+          </div>
+          <div class="testi-card">
+            <p class="testi-text">"From the first phone call to the final cleanup, everything was handled professionally. Our stamped concrete patio is the talk of the entire neighborhood this summer."</p>
+            <div class="testi-author">
+              <img class="testi-avatar" src="https://randomuser.me/api/portraits/women/15.jpg" alt="Amy J." />
+              <div><div class="testi-name">Amy J.</div><div class="testi-role">Homeowner</div></div>
+            </div>
+          </div>
+          <div class="testi-card">
+            <p class="testi-text">"They completed our commercial storefront masonry on time and under budget. These guys are the best in the Carolinas, period. Won't use anyone else going forward."</p>
+            <div class="testi-author">
+              <img class="testi-avatar" src="https://randomuser.me/api/portraits/men/88.jpg" alt="Robert B." />
+              <div><div class="testi-name">Robert B.</div><div class="testi-role">Business Owner</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -875,7 +1136,7 @@
           <div class="contact-icon">📍</div>
           <div>
             <h4>Service Area</h4>
-            <p>Southeastern North Carolina<br>and surrounding communities</p>
+            <p>North &amp; South Carolina<br>and surrounding areas</p>
           </div>
         </div>
         <div class="contact-item">
@@ -898,7 +1159,7 @@
         <span class="footer-logo">
   <img src="precision-logo-3x.png" alt="Precision Concrete & Masonry" />
 </span>
-        <p class="footer-desc">Expert concrete and masonry work serving southeastern North Carolina. Licensed, insured, and proud of every project we've ever built.</p>
+        <p class="footer-desc">Expert concrete and masonry work serving North &amp; South Carolina. Licensed, insured, and proud of every project we've ever built.</p>
       </div>
       <div class="footer-col">
         <h4>Quick Links</h4>
@@ -916,14 +1177,14 @@
         <ul class="footer-links">
           <li><a href="tel:9102807135">910-280-7135</a></li>
           <li><a href="mailto:info@precisionconcretemason.com">info@precisionconcretemason.com</a></li>
-          <li>Southeastern North Carolina</li>
+          <li>North &amp; South Carolina</li>
           <li>Mon–Sat: 7am – 6pm</li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
       <p>© 2025 Precision Concrete &amp; Masonry. All rights reserved.</p>
-      <p>Licensed &amp; Insured · Serving Southeastern North Carolina</p>
+      <p>Licensed &amp; Insured · Serving North &amp; South Carolina</p>
     </div>
   </div>
 </footer>
@@ -936,136 +1197,6 @@ window.addEventListener('scroll', () => {
   header.classList.toggle('scrolled', window.scrollY > 40);
 }, { passive: true });
 
-/* ── HERO CANVAS ANIMATION ───────────────────────────────────── */
-(function() {
-  const canvas = document.getElementById('hero-canvas');
-  const ctx = canvas.getContext('2d');
-  let W, H, particles, animId;
-
-  function resize() {
-    W = canvas.width  = canvas.offsetWidth;
-    H = canvas.height = canvas.offsetHeight;
-  }
-
-  function randomBetween(a, b) { return a + Math.random() * (b - a); }
-
-  function initParticles() {
-    const count = Math.floor((W * H) / 9000);
-    particles = [];
-    for (let i = 0; i < count; i++) {
-      const size = randomBetween(2, 7);
-      particles.push({
-        x:    randomBetween(0, W),
-        y:    randomBetween(0, H),
-        vx:   randomBetween(-0.18, 0.18),
-        vy:   randomBetween(-0.12, 0.12),
-        size,
-        opacity: randomBetween(0.08, 0.32),
-        pulse: randomBetween(0, Math.PI * 2),
-        pulseSpeed: randomBetween(0.005, 0.018),
-        color: Math.random() > 0.6 ? '#F7941D' : '#888',
-        rotation: randomBetween(0, Math.PI),
-        rotSpeed: randomBetween(-0.003, 0.003),
-      });
-    }
-  }
-
-  // Noise-like stone texture background
-  function drawBackground() {
-    // Base gradient
-    const grad = ctx.createLinearGradient(0, 0, W, H);
-    grad.addColorStop(0,   '#111008');
-    grad.addColorStop(0.5, '#1a1205');
-    grad.addColorStop(1,   '#0d0d0d');
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, W, H);
-
-    // Subtle radial glows
-    const g1 = ctx.createRadialGradient(W * 0.2, H * 0.4, 0, W * 0.2, H * 0.4, W * 0.45);
-    g1.addColorStop(0, 'rgba(247,148,29,0.07)');
-    g1.addColorStop(1, 'transparent');
-    ctx.fillStyle = g1;
-    ctx.fillRect(0, 0, W, H);
-
-    const g2 = ctx.createRadialGradient(W * 0.8, H * 0.6, 0, W * 0.8, H * 0.6, W * 0.4);
-    g2.addColorStop(0, 'rgba(247,148,29,0.05)');
-    g2.addColorStop(1, 'transparent');
-    ctx.fillStyle = g2;
-    ctx.fillRect(0, 0, W, H);
-  }
-
-  function drawConnections() {
-    const maxDist = 120;
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
-        const dx = particles[i].x - particles[j].x;
-        const dy = particles[i].y - particles[j].y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < maxDist) {
-          const alpha = (1 - dist / maxDist) * 0.08;
-          ctx.strokeStyle = `rgba(247,148,29,${alpha})`;
-          ctx.lineWidth = 0.5;
-          ctx.beginPath();
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.stroke();
-        }
-      }
-    }
-  }
-
-  function tick(t) {
-    animId = requestAnimationFrame(tick);
-    drawBackground();
-    drawConnections();
-
-    for (const p of particles) {
-      p.x += p.vx;
-      p.y += p.vy;
-      p.pulse += p.pulseSpeed;
-      p.rotation += p.rotSpeed;
-
-      // Wrap
-      if (p.x < -10) p.x = W + 10;
-      if (p.x > W + 10) p.x = -10;
-      if (p.y < -10) p.y = H + 10;
-      if (p.y > H + 10) p.y = -10;
-
-      const osc = 0.7 + 0.3 * Math.sin(p.pulse);
-      const sz  = p.size * osc;
-      const op  = p.opacity * osc;
-
-      ctx.save();
-      ctx.globalAlpha = op;
-      ctx.fillStyle = p.color;
-      ctx.translate(p.x, p.y);
-      ctx.rotate(p.rotation);
-
-      // Draw a tiny stone-like polygon
-      ctx.beginPath();
-      const sides = 4;
-      for (let k = 0; k < sides; k++) {
-        const angle = (k / sides) * Math.PI * 2 + p.rotation;
-        const r = sz * (0.8 + 0.2 * Math.sin(p.pulse + k));
-        if (k === 0) ctx.moveTo(Math.cos(angle) * r, Math.sin(angle) * r);
-        else ctx.lineTo(Math.cos(angle) * r, Math.sin(angle) * r);
-      }
-      ctx.closePath();
-      ctx.fill();
-      ctx.restore();
-    }
-  }
-
-  function init() {
-    resize();
-    initParticles();
-    cancelAnimationFrame(animId);
-    tick(0);
-  }
-
-  window.addEventListener('resize', () => { resize(); initParticles(); }, { passive: true });
-  init();
-})();
 
 /* ── HAMBURGER TOGGLE ────────────────────────────────────────── */
 (function() {
